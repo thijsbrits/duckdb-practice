@@ -44,4 +44,4 @@ SELECT model_year, COUNT(*) AS vehicle_count
 FROM electricvehicles
 GROUP BY model_year""")
 
-    conn.execute("""EXPORT TABLE model_year_vehicle_count TO 'model_year_vehicle_count.parquet' (PARTITION_BY model_year);""")
+    conn.execute("""COPY model_year_vehicle_count TO 'model_year_vehicle_count.parquet' (FORMAT PARQUET, PARTITION_BY model_year, OVERWRITE_OR_IGNORE);""")

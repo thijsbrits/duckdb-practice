@@ -45,11 +45,11 @@ class ElectricVehicle:
         if (self.model_year < 1700) or self.model_year > 3000:
             raise UnrealisticModelYearError(f"Non-realistic model_year {self.model_year}")
 
-        match = re.match(r'POINT \((\-?\d+\.\d+) (\-?\d+\.\d+)\)', self.vehicle_location)
-        if not match:
-            raise InvalidLocationFormatError(f"Invalid location format {self.vehicle_location}, should be in format POINT (0.00, 0.00)")
+        if self.vehicle_location and not re.match(r'POINT \((\-?\d+\.\d+) (\-?\d+\.\d+)\)', self.vehicle_location):
+            raise InvalidLocationFormatError(
+                f"Invalid location format {self.vehicle_location}, should be in format POINT (0.00, 0.00)")
 
-        # we can add more data validations here as
+        # we can add more data validations here...
 
     @classmethod
     def from_dict(cls, obj):
@@ -61,15 +61,15 @@ class ElectricVehicle:
             city=obj['City'],
             state=obj['State'],
             postal_code=obj['Postal Code'],
-            model_year=int(obj['Model Year']),
+            model_year=int(obj['Model Year']) if obj['Model Year'] else None,
             make=obj['Make'],
             model=obj['Model'],
             electric_vehicle_type=obj['Electric Vehicle Type'],
             cafv_eligibility=obj['Clean Alternative Fuel Vehicle (CAFV) Eligibility'],
-            electric_range=int(obj['Electric Range']),
-            base_msrp=int(obj['Base MSRP']),
-            legislative_district=int(obj['Legislative District']),
-            dol_vehicle_id=int(obj['DOL Vehicle ID']),
+            electric_range=int(obj['Electric Range']) if obj['Electric Range'] else None,
+            base_msrp=int(obj['Base MSRP']) if obj['Base MSRP'] else None,
+            legislative_district=int(obj['Legislative District']) if obj['Legislative District'] else None,
+            dol_vehicle_id=int(obj['DOL Vehicle ID']) if obj['DOL Vehicle ID'] else None,
             vehicle_location=obj['Vehicle Location'],
             electric_utility=obj['Electric Utility'],
             census_tract=obj['2020 Census Tract'],

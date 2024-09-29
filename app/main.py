@@ -22,13 +22,18 @@ def populate_electric_vehicles_from_csv(conn, csv_path):
     placeholders_str = create_placeholder_str(field_names)
     insert_query = f'''INSERT INTO electricvehicles ({columns_str}) VALUES ({placeholders_str})'''
 
-    conn.execute("BEGIN TRANSACTION")
+    total_records_to_be_inserted = 0
 
+    conn.execute("BEGIN TRANSACTION")
     for row in load_csv_rows(csv_path):
         electric_vehicle = ElectricVehicle.from_dict(row)
+        total_records_to_be_inserted += 1
         conn.execute(insert_query, astuple(electric_vehicle))
-
     conn.execute("COMMIT")
+
+    logger.info(f"Total inserted records: {total_records_to_be_inserted}")
+
+    assert total_records_to_be_inserted == conn.execute('SELECT count(*) FROM electricvehicles').fetchone()[0]
 
 
 def main(csv_path, ddl_path, db_path):
