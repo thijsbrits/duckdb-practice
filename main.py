@@ -43,13 +43,15 @@ def populate_electric_vehicles_from_csv(conn, csv_path):
 
 def main(csv_path, ddl_path, db_path):
     with duckdb.connect(db_path) as conn:
-        # init_db(conn, ddl_path)
-        #
-        # populate_electric_vehicles_from_csv(conn, csv_path)
+        init_db(conn, ddl_path)
+        populate_electric_vehicles_from_csv(conn, csv_path)
 
-        count_cars_per_city(conn)
-        find_top3_popular_ev(conn)
-        find_popular_ev_postal_code(conn)
+        # Chose to just print the outputs.
+        # Wasn't really clear how to report the output of the query
+        print(count_cars_per_city(conn))
+        print(find_top3_popular_ev(conn))
+        print(find_popular_ev_postal_code(conn))
+
         count_ev_by_model_year_as_parquet(conn)
 
 

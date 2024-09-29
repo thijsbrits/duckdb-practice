@@ -8,6 +8,7 @@ logger = logging.getLogger(__name__)
 
 def init_db(conn, ddl_path):
     install_spatial(conn)
+    # for repeated running, would not do this in prod normally ofcourse
     conn.execute('DROP TABLE IF EXISTS electricvehicles')
     cars_ddl = Path(ddl_path).read_text()
     conn.execute(cars_ddl)
