@@ -1,7 +1,6 @@
 import duckdb
 import pytest
-
-from app.database import install_spatial
+from database import install_spatial
 
 
 @pytest.fixture(scope="session")
