@@ -1,3 +1,4 @@
+import os
 import pytest
 import tempfile
 import csv
@@ -36,13 +37,10 @@ def mock_electric_vehicles_csv(electric_vehicle_data):
         writer.writerow(list(electric_vehicle_data.keys()))
         writer.writerow(list(electric_vehicle_data.values()))
 
-
-
     # Yield the file path
     yield temp_file.name
 
     # Clean up the file after the test
-    import os
     os.unlink(temp_file.name)
 
 

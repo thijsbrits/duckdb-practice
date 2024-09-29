@@ -6,14 +6,29 @@ def count_cars_per_city(conn):
 
 def find_top3_popular_ev(conn):
     """Find the top 3 most popular electric vehicles."""
-    # TODO use top N?
+
     result = conn.execute(
-        """
-SELECT make, model, COUNT(*) AS popularity
-FROM electricvehicles
-GROUP BY make, model
-ORDER BY popularity DESC
-LIMIT 3;""").fetchall()
+    """
+WITH vehiclecounts AS (
+  SELECT 
+    make,
+    model,
+    COUNT(*) AS model_count
+  FROM electricvehicles
+  GROUP BY make, model
+),
+ranked_vehicles AS (
+  SELECT 
+    make,
+    model,
+    model_count,
+    RANK() OVER (ORDER BY model_count DESC) as rank
+  FROM vehiclecounts
+)
+SELECT make, model, model_count
+FROM ranked_vehicles
+WHERE rank <= 3
+ORDER BY rank, make, model;""").fetchall()
     return result
 
 
