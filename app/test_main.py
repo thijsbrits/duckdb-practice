@@ -1,0 +1,1 @@
+from app.main import populate_electric_vehicles_from_csv
