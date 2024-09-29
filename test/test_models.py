@@ -1,4 +1,4 @@
-from app.models import ElectricVehicle, UnrealisticModelYearError, InvalidStateError, InvalidLocationFormatError, InvalidVinSizeError
+from models import ElectricVehicle, UnrealisticModelYearError, InvalidStateError, InvalidLocationFormatError, InvalidVinSizeError
 import pytest
 import copy
 

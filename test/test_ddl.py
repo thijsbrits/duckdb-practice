@@ -2,12 +2,12 @@ import duckdb
 import pytest
 from pathlib import Path
 
-from app.test.conftest import conn
+from test.conftest import conn
 
 
 @pytest.fixture(scope="session")
 def create_electricvehicles_from_ddl(conn):
-    create_table_query = Path("../electricvehicles.ddl").read_text()
+    create_table_query = Path("electricvehicles.ddl").read_text()
     conn.execute(create_table_query)
 
 

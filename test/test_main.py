@@ -1,8 +1,8 @@
 import pytest
 import tempfile
 import csv
-from app.main import populate_electric_vehicles_from_csv
-from app.test.test_ddl import create_electricvehicles_from_ddl
+from main import populate_electric_vehicles_from_csv
+from test.test_ddl import create_electricvehicles_from_ddl
 
 @pytest.fixture
 def electric_vehicle_data():

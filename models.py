@@ -1,5 +1,5 @@
 from dataclasses import dataclass, fields
-from app.utils import convert_empty_to_none
+from utils import convert_empty_to_none
 import re
 
 class UnrealisticModelYearError(Exception):
@@ -49,7 +49,7 @@ class ElectricVehicle:
             raise InvalidLocationFormatError(
                 f"Invalid location format {self.vehicle_location}, should be in format POINT (0.00, 0.00)")
 
-        # we can add more data validations here...
+        # we can add more data validations here based on the nature of the data...
 
     @classmethod
     def from_dict(cls, obj):

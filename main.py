@@ -2,11 +2,11 @@ import duckdb
 from dataclasses import astuple
 import argparse
 
-from app.database import init_db
-from app.models import ElectricVehicle
-from app.utils import load_csv_rows, create_placeholder_str
+from database import init_db
+from models import ElectricVehicle
+from utils import load_csv_rows, create_placeholder_str
 import logging
-from app.queries import (
+from queries import (
     count_cars_per_city,
     find_top3_popular_ev,
     find_popular_ev_postal_code,
@@ -17,12 +17,17 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def populate_electric_vehicles_from_csv(conn, csv_path):
+    """Populate electricvehicles table from CSV file."""
+
+    table_name = "electricvehicles"
     field_names = ElectricVehicle.field_names()
     columns_str = ", ".join(field_names)
     placeholders_str = create_placeholder_str(field_names)
-    insert_query = f'''INSERT INTO electricvehicles ({columns_str}) VALUES ({placeholders_str})'''
+    insert_query = f'''INSERT INTO {table_name} ({columns_str}) VALUES ({placeholders_str})'''
 
     total_records_to_be_inserted = 0
+
+    logger.info("Starting electricvehicles insertion from CSV file.")
 
     conn.execute("BEGIN TRANSACTION")
     for row in load_csv_rows(csv_path):
@@ -31,16 +36,16 @@ def populate_electric_vehicles_from_csv(conn, csv_path):
         conn.execute(insert_query, astuple(electric_vehicle))
     conn.execute("COMMIT")
 
-    logger.info(f"Total inserted records: {total_records_to_be_inserted}")
-
     assert total_records_to_be_inserted == conn.execute('SELECT count(*) FROM electricvehicles').fetchone()[0]
+
+    logger.info(f"Insertion successful, inserted records: {total_records_to_be_inserted}")
 
 
 def main(csv_path, ddl_path, db_path):
     with duckdb.connect(db_path) as conn:
-        init_db(conn, ddl_path)
-
-        populate_electric_vehicles_from_csv(conn, csv_path)
+        # init_db(conn, ddl_path)
+        #
+        # populate_electric_vehicles_from_csv(conn, csv_path)
 
         count_cars_per_city(conn)
         find_top3_popular_ev(conn)

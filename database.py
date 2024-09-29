@@ -15,8 +15,10 @@ def init_db(conn, ddl_path):
 
 def install_spatial(conn):
     try:
+        logger.info("Installing spatial for duckdb")
         conn.execute("INSTALL spatial")
         conn.execute("LOAD spatial")
+        logger.info("Spatial installed")
     except Exception as e:
         logger.error(f"Failed to install/load spatial extension: {e}")
         sys.exit(1)
